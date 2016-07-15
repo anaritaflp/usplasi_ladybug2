@@ -1,0 +1,21 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- image_geometry
+- catkin
+- roscpp
+- sensor_msgs
+- std_msgs
+- image_transport
+- rospy
+- cv_bridge
+description: The ladybug2 package
+license: TODO
+maintainers: anaritaflp <anaritap44@gmail.com>
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: ''

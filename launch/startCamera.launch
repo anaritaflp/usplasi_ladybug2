@@ -1,0 +1,110 @@
+<launch>
+
+    <!-- ************************************************************* -->
+    <!-- ******** START LADYBUG CAMERA -->
+    
+    <node pkg="nodelet" type="nodelet" name="ladybug_nodelet_manager" args="manager" />  
+    
+    <node pkg="nodelet" type="nodelet" name="camera1394_nodelet"
+	args="load camera1394/driver ladybug_nodelet_manager">
+      	<param name="guid" value="00b09d0100ac4597" />
+      	<param name="video_mode" value="format7_mode0" />
+      	<param name="format_color_code" value="mono8" />
+        <param name="iso_speed" value="600" />
+    </node>
+    
+    
+    <node pkg="image_view" type="image_view" name="image_view_all">
+		<remap from="image" to="/camera/image_raw" />
+    </node>
+    
+    
+
+    <!-- ************************************************************* -->
+    <!-- ******** SPLIT LADYBUG IMAGE INTO 6 IMAGES -->
+	<!--
+    <node pkg="ladybug2" type="split_ladybug_node" name="split" output="screen">
+        <param name="camera_topic" value="camera/image_raw"/>       
+        <param name="color" value="true"/>       
+        <param name="resize_half" value="false"/> 
+        <param name="camera_topic" value="camera/image_raw"/> 
+        <param name="yaml_path" value="$(find ladybug2)/param/"/>        
+    </node>
+    -->
+    
+    <!-- ************************************************************* -->
+    <!-- ******** RECTIFY -->
+	<!--
+    <node pkg="nodelet" type="nodelet" name="cam_manager" args="manager" output="screen" respawn="true" />
+    
+    <node pkg="nodelet" type="nodelet" name="cam_rectify_0"
+        args="load image_proc/rectify cam_manager" output="screen" respawn="true" >
+        <remap from="camera_info" to="ladybug/0/camera_info"/>
+		<remap from="image_mono" to="ladybug/0/image_raw"/>
+		<remap from="image_rect" to="ladybug/0/image_rect"/>
+    </node>
+    
+    <node pkg="nodelet" type="nodelet" name="cam_rectify_1"
+        args="load image_proc/rectify cam_manager" output="screen" respawn="true" >
+        <remap from="camera_info" to="ladybug/1/camera_info"/>
+		<remap from="image_mono" to="ladybug/1/image_raw"/>
+		<remap from="image_rect" to="ladybug/1/image_rect"/>
+    </node>
+    
+    <node pkg="nodelet" type="nodelet" name="cam_rectify_2"
+        args="load image_proc/rectify cam_manager" output="screen" respawn="true" >
+        <remap from="camera_info" to="ladybug/2/camera_info"/>
+		<remap from="image_mono" to="ladybug/2/image_raw"/>
+		<remap from="image_rect" to="ladybug/2/image_rect"/>
+    </node>
+    
+    <node pkg="nodelet" type="nodelet" name="cam_rectify_3"
+        args="load image_proc/rectify cam_manager" output="screen" respawn="true" >
+        <remap from="camera_info" to="ladybug/3/camera_info"/>
+		<remap from="image_mono" to="ladybug/3/image_raw"/>
+		<remap from="image_rect" to="ladybug/3/image_rect"/>
+    </node>
+    
+    <node pkg="nodelet" type="nodelet" name="cam_rectify_4"
+        args="load image_proc/rectify cam_manager" output="screen" respawn="true" >
+        <remap from="camera_info" to="ladybug/4/camera_info"/>
+		<remap from="image_mono" to="ladybug/4/image_raw"/>
+		<remap from="image_rect" to="ladybug/4/image_rect"/>
+    </node>
+    
+    <node pkg="nodelet" type="nodelet" name="cam_rectify_5"
+        args="load image_proc/rectify cam_manager" output="screen" respawn="true" >
+        <remap from="camera_info" to="ladybug/5/camera_info"/>
+		<remap from="image_mono" to="ladybug/5/image_raw"/>
+		<remap from="image_rect" to="ladybug/5/image_rect"/>
+    </node>
+    -->
+    <!-- ************************************************************* -->
+    <!-- ******** VIEW EACH CAMERA IMAGE -->
+    <!--
+    <node pkg="image_view" type="image_view" name="image_view_0">
+		<remap from="image" to="/ladybug/0/image_rect" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_1">
+		<remap from="image" to="/ladybug/1/image_rect" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_2">
+		<remap from="image" to="/ladybug/2/image_rect" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_3">
+		<remap from="image" to="/ladybug/3/image_rect" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_4">
+		<remap from="image" to="/ladybug/4/image_rect" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_5">
+		<remap from="image" to="/ladybug/5/image_rect" />
+    </node>
+    -->
+
+</launch>
