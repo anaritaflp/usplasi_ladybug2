@@ -88,9 +88,67 @@
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        camRight = 0;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="ladybugUtilities_8cpp.html#ae3af301d352c7d273b3f87367c1d6bbb">   77</a></span>&#160; <span class="keywordtype">bool</span> <a class="code" href="ladybugUtilities_8cpp.html#ae3af301d352c7d273b3f87367c1d6bbb">getPrevAndCurrCamIndex</a>(<span class="keywordtype">int</span> position, <span class="keywordtype">int</span> &amp;camPrev, <span class="keywordtype">int</span> &amp;camCurr)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;     <span class="keywordflow">if</span>(position &lt; 0 || position &gt;= 15)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;     {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;         <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;     }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;     camPrev = position/3;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;     <span class="keywordflow">if</span>(position%3 == 0)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;     {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;         camCurr = camPrev;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;     }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;     <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;     {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;         <span class="keywordtype">int</span> camLeft, camRight;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;         <a class="code" href="ladybugUtilities_8cpp.html#a9168aedbe1e2fcb8e50e0c518fb9232b">getLeftRightCameras</a>(camPrev, camLeft, camRight);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;         <span class="keywordflow">if</span>(position%3 == 1)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;         {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;             camCurr = camRight;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;         }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;         <span class="keywordflow">else</span> <span class="keywordflow">if</span>(position%3 == 2)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;         {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;             camCurr = camLeft;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;         }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;     }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;     <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="ladybugUtilities_8cpp.html#a502892473326bd04b087270a2742627f">  110</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="ladybugUtilities_8cpp.html#a502892473326bd04b087270a2742627f">getVectorPosition</a>(<span class="keywordtype">int</span> camPrev, <span class="keywordtype">int</span> camCurr, <span class="keywordtype">int</span> &amp;position)</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;{</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">if</span>(camPrev &lt; 0 || camPrev &gt; 4)</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        }</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        position = 3 * camPrev;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordflow">if</span>(camCurr == camPrev)</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">int</span> camLeft, camRight;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <a class="code" href="ladybugUtilities_8cpp.html#a9168aedbe1e2fcb8e50e0c518fb9232b">getLeftRightCameras</a>(camPrev, camLeft, camRight);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">if</span>(camCurr == camRight)</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                position += 1;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        }</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">if</span>(camCurr == camLeft)</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                position += 2;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        }</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;}</div>
 <div class="ttc" id="ladybugUtilities_8h_html_aafd9a8a07447ca0c0c79ae00e8e5f7e9"><div class="ttname"><a href="ladybugUtilities_8h.html#aafd9a8a07447ca0c0c79ae00e8e5f7e9">IMAGE_WIDTH</a></div><div class="ttdeci">#define IMAGE_WIDTH</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8h_source.html#l00009">ladybugUtilities.h:9</a></div></div>
 <div class="ttc" id="ladybugUtilities_8h_html_a5ccba902a68f42f3750ef73f3188c691"><div class="ttname"><a href="ladybugUtilities_8h.html#a5ccba902a68f42f3750ef73f3188c691">CAMERA_POSITIONS</a></div><div class="ttdeci">const int CAMERA_POSITIONS[6]</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8h_source.html#l00015">ladybugUtilities.h:15</a></div></div>
+<div class="ttc" id="ladybugUtilities_8cpp_html_ae3af301d352c7d273b3f87367c1d6bbb"><div class="ttname"><a href="ladybugUtilities_8cpp.html#ae3af301d352c7d273b3f87367c1d6bbb">getPrevAndCurrCamIndex</a></div><div class="ttdeci">bool getPrevAndCurrCamIndex(int position, int &amp;camPrev, int &amp;camCurr)</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8cpp_source.html#l00077">ladybugUtilities.cpp:77</a></div></div>
 <div class="ttc" id="ladybugUtilities_8h_html"><div class="ttname"><a href="ladybugUtilities_8h.html">ladybugUtilities.h</a></div></div>
+<div class="ttc" id="ladybugUtilities_8cpp_html_a502892473326bd04b087270a2742627f"><div class="ttname"><a href="ladybugUtilities_8cpp.html#a502892473326bd04b087270a2742627f">getVectorPosition</a></div><div class="ttdeci">bool getVectorPosition(int camPrev, int camCurr, int &amp;position)</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8cpp_source.html#l00110">ladybugUtilities.cpp:110</a></div></div>
 <div class="ttc" id="ladybugUtilities_8h_html_ab26685c8000c5700081bbfc0a6299a22"><div class="ttname"><a href="ladybugUtilities_8h.html#ab26685c8000c5700081bbfc0a6299a22">MONO</a></div><div class="ttdeci">#define MONO</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8h_source.html#l00013">ladybugUtilities.h:13</a></div></div>
 <div class="ttc" id="ladybugUtilities_8h_html_a676fd455b512d2b69f626ea4bd738bce"><div class="ttname"><a href="ladybugUtilities_8h.html#a676fd455b512d2b69f626ea4bd738bce">NUM_CAMERAS</a></div><div class="ttdeci">#define NUM_CAMERAS</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8h_source.html#l00010">ladybugUtilities.h:10</a></div></div>
 <div class="ttc" id="ladybugUtilities_8cpp_html_ac18f1ed97d440ea4c4c1454c590be5bb"><div class="ttname"><a href="ladybugUtilities_8cpp.html#ac18f1ed97d440ea4c4c1454c590be5bb">splitLadybug</a></div><div class="ttdeci">std::vector&lt; cv::Mat &gt; splitLadybug(cv::Mat ladybugImage, std::string colorCode)</div><div class="ttdef"><b>Definition:</b> <a href="ladybugUtilities_8cpp_source.html#l00007">ladybugUtilities.cpp:7</a></div></div>
@@ -102,7 +160,7 @@
 <hr size="1"><div style="align: right;">
 <a href="http://wiki.ros.org/ladybug2">ladybug2</a><br />
 Author(s): </br />
-<small>autogenerated on Tue Jul 12 2016 09:29:52</small>
+<small>autogenerated on Fri Jul 15 2016 17:57:19</small>
 </div>
 </body>
 </html>

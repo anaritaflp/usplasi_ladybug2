@@ -9,33 +9,38 @@ find_package(catkin REQUIRED COMPONENTS
     image_transport
     cv_bridge
     image_geometry
+    camera_calibration_parsers
 )
 
 find_package(OpenCV REQUIRED)
+find_package(cmake_modules REQUIRED)
+find_package(Eigen REQUIRED)
 
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
+    ${Eigen_INCLUDE_DIRS} 
 )
 
-add_library(LadybugUtil
-    src/ladybugUtilities.cpp
+add_library(Ladybug2
+    src/Ladybug2.cpp
 )
 
-target_link_libraries(LadybugUtil
+target_link_libraries(Ladybug2
+    ${catkin_LIBRARIES}
     ${OpenCV_LIBS}
 )
 
 catkin_package(
     INCLUDE_DIRS include    
     LIBRARIES ladybug2
-    CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs cv_bridge image_geometry 
+    CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs cv_bridge image_geometry camera_calibration_parsers 
     DEPENDS system_lib
-    LIBRARIES LadybugUtil
+    LIBRARIES Ladybug2
 )
 
-install(TARGETS LadybugUtil
+install(TARGETS Ladybug2
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
@@ -53,6 +58,6 @@ add_executable(split_ladybug_node
 target_link_libraries(split_ladybug_node 
     ${catkin_LIBRARIES} 
     ${OpenCV_LIBS}
-    LadybugUtil
+    Ladybug2
 )
 

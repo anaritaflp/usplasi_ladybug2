@@ -4,12 +4,12 @@ camera_name: ladybug_cam_2
 camera_matrix:
   rows: 3
   cols: 3
-  data: [548.563441, 0, 373.541053, 0, 542.61315, 461.774933, 0, 0, 1]
+  data: [549.678622, 0, 381.836564, 0, 548.3896590000001, 490.647587, 0, 0, 1]
 distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
   cols: 5
-  data: [-0.290042, 0.058069, 0.006483999999999999, -0.000194, 0]
+  data: [-0.313328, 0.07363599999999999, 0.003431, 0.001759, 0]
 rectification_matrix:
   rows: 3
   cols: 3
@@ -17,4 +17,4 @@ rectification_matrix:
 projection_matrix:
   rows: 3
   cols: 4
-  data: [447.892761, 0, 366.823907, 0, 0, 370.455658, 478.233085, 0, 0, 0, 1, 0]
+  data: [443.118042, 0, 383.443829, 0, 0, 384.471863, 500.395569, 0, 0, 0, 1, 0]

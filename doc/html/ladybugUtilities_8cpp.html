@@ -44,6 +44,10 @@ Include dependency graph for ladybugUtilities.cpp:</div>
 Functions</h2></td></tr>
 <tr class="memitem:a9168aedbe1e2fcb8e50e0c518fb9232b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ladybugUtilities_8cpp.html#a9168aedbe1e2fcb8e50e0c518fb9232b">getLeftRightCameras</a> (int cam, int &amp;camLeft, int &amp;camRight)</td></tr>
 <tr class="separator:a9168aedbe1e2fcb8e50e0c518fb9232b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3af301d352c7d273b3f87367c1d6bbb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ladybugUtilities_8cpp.html#ae3af301d352c7d273b3f87367c1d6bbb">getPrevAndCurrCamIndex</a> (int position, int &amp;camPrev, int &amp;camCurr)</td></tr>
+<tr class="separator:ae3af301d352c7d273b3f87367c1d6bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a502892473326bd04b087270a2742627f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ladybugUtilities_8cpp.html#a502892473326bd04b087270a2742627f">getVectorPosition</a> (int camPrev, int camCurr, int &amp;position)</td></tr>
+<tr class="separator:a502892473326bd04b087270a2742627f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac18f1ed97d440ea4c4c1454c590be5bb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; cv::Mat &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ladybugUtilities_8cpp.html#ac18f1ed97d440ea4c4c1454c590be5bb">splitLadybug</a> (cv::Mat ladybugImage, std::string colorCode)</td></tr>
 <tr class="separator:ac18f1ed97d440ea4c4c1454c590be5bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -92,6 +96,94 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae3af301d352c7d273b3f87367c1d6bbb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool getPrevAndCurrCamIndex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>camPrev</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>camCurr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get previous and current camera associated to a given vector position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>vector position </td></tr>
+    <tr><td class="paramname">int&amp;</td><td>output previous camera index </td></tr>
+    <tr><td class="paramname">int&amp;</td><td>output current camera index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool true if valid vector position, false otherwise </dd></dl>
+
+<p>Definition at line <a class="el" href="ladybugUtilities_8cpp_source.html#l00077">77</a> of file <a class="el" href="ladybugUtilities_8cpp_source.html">ladybugUtilities.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a502892473326bd04b087270a2742627f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool getVectorPosition </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>camPrev</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>camCurr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>position</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get vector position given a previous and current camera index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>previous camera index </td></tr>
+    <tr><td class="paramname">int</td><td>current camera index </td></tr>
+    <tr><td class="paramname">int&amp;</td><td>output vector index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool true if valid camera indices, false otherwise </dd></dl>
+
+<p>Definition at line <a class="el" href="ladybugUtilities_8cpp_source.html#l00110">110</a> of file <a class="el" href="ladybugUtilities_8cpp_source.html">ladybugUtilities.cpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ac18f1ed97d440ea4c4c1454c590be5bb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -135,7 +227,7 @@ Functions</h2></td></tr>
 <hr size="1"><div style="align: right;">
 <a href="http://wiki.ros.org/ladybug2">ladybug2</a><br />
 Author(s): </br />
-<small>autogenerated on Tue Jul 12 2016 09:29:52</small>
+<small>autogenerated on Fri Jul 15 2016 17:57:19</small>
 </div>
 </body>
 </html>
