@@ -82,9 +82,10 @@ class Ladybug2
          * @return void */
         void getExtrinsics();
 
-        std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Vector with intrinsic calibration data of each camera */
-        std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Vector with CameraInfo messages of each camera */
-        std::vector<Eigen::Matrix4f> extrinsics_;		                /*!< Vector with extrinsic parameters of the cameras */
+        std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Intrinsic parameters: image_geometry::PinholeCameraModel */
+        std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Intrinsic parameters: sensor_msgs::CameraInfo */
+        std::vector<Eigen::Matrix3f> cameraMatrices_;	           		/*!< Intrinsic parameters: camera matrices (K) */
+        std::vector<Eigen::Matrix4f> extrinsics_;		                /*!< Extrinsic parameters: tranformation relatively to global (Ladybug) coordinates */
 
     private:
 

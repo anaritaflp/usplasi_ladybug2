@@ -89,7 +89,7 @@ void Ladybug2::getLeftRightCameras(int cam, int &camLeft, int &camRight)
     }
 
     // too large camera index: assume it's camera 4 (last camera in the ring)
-    if(cam > NUM_CAMERAS-2)
+    if(cam > NUM_OMNI_CAMERAS)
     {
         cam = 4;
     }
@@ -99,9 +99,9 @@ void Ladybug2::getLeftRightCameras(int cam, int &camLeft, int &camRight)
     
     if(camLeft == -1)
     {
-        camLeft = NUM_CAMERAS - 2;
+        camLeft = NUM_OMNI_CAMERAS - 1;
     }
-    if(camRight == NUM_CAMERAS - 1)
+    if(camRight == NUM_OMNI_CAMERAS)
     {
         camRight = 0;
     }
@@ -175,6 +175,7 @@ void Ladybug2::getIntrinsics()
 {
     intrinsics_.clear();
     cameraInfos_.clear();
+    cameraMatrices_.clear();
 
     for(int i=0; i<NUM_CAMERAS; i++)
     {
@@ -190,15 +191,17 @@ void Ladybug2::getIntrinsics()
             ROS_ERROR("Invalid calibration file! Exiting...");
             ros::shutdown();
         }
-
         cameraInfos_.push_back(camInfo);
-
-        std::cout << "Found calibration of camera " << camName << std::endl;
         
         // get pinhole camera model out of cameraInfo
         image_geometry::PinholeCameraModel camModel;
         camModel.fromCameraInfo(camInfo);        
-        intrinsics_.push_back(camModel);   
+        intrinsics_.push_back(camModel);  
+        
+        // get camera matrix
+        Eigen::Matrix3f K;
+        K << camModel.fx(), 0.0, camModel.cx(), 0.0, camModel.fy(), camModel.cy(), 0.0, 0.0, 1.0;
+        cameraMatrices_.push_back(K); 
     }
 }
 
@@ -208,6 +211,9 @@ void Ladybug2::getIntrinsics()
 void Ladybug2::getExtrinsics()
 {
     extrinsics_.clear();
+	
+	Eigen::Matrix4f rotMat;
+	rotMat << 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0;
 
     for(int i=0; i<NUM_CAMERAS; i++)
     {
@@ -228,6 +234,8 @@ void Ladybug2::getExtrinsics()
         // get transform
         Eigen::Matrix4f ext;
         ext << R(0, 0), R(0, 1), R(0, 2), t(0), R(1, 0), R(1, 1), R(1, 2), t(1), R(2, 0), R(2, 1), R(2, 2), t(2), 0, 0, 0, 1;
+		
+		ext = ext * rotMat;
 
         extrinsics_.push_back(ext);
     }
