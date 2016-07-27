@@ -11,25 +11,11 @@ Ladybug2::Ladybug2()
  * @param ros::NodeHandle ROS node */
 Ladybug2::Ladybug2(ros::NodeHandle node)
 {
-    param_intrinsicsPaths_.resize(NUM_CAMERAS);
-    param_extrinsicsData_.resize(NUM_CAMERAS);
+    // get vector with intrinsics data
+    getIntrinsics(node);
 
-    for(int i=0; i<NUM_CAMERAS; i++)
-    {
-        // get path of yaml calibration file
-        char param_calibPath[50];
-        sprintf(param_calibPath, "calib_file_cam_%d", i);
-        node.param<std::string>(std::string(param_calibPath), param_intrinsicsPaths_[i], "");
-
-        // get vector with extrinsics data
-        char extParamName[50];
-        sprintf(extParamName, "cam%d_ext", i);
-        node.getParam(std::string(extParamName), param_extrinsicsData_[i]);
-    }
-
-    // intrinsic and extrinsic parameters
-    getIntrinsics();
-    getExtrinsics();
+    // get vector with extrinsic transformations   
+    getExtrinsics(node);
 }
 
 /** Destructor */
@@ -169,19 +155,27 @@ std::vector<cv::Mat> Ladybug2::rectifyManually(std::vector<cv::Mat> images)
 }
 
 /** Get intrinsic parameters from manually obtained .yaml files.
- * @param void
+ * @param ros::NodeHandle ROS node for reading parameters
  * @return void */
-void Ladybug2::getIntrinsics()
+void Ladybug2::getIntrinsics(ros::NodeHandle node)
 {
     intrinsics_.clear();
     cameraInfos_.clear();
     cameraMatrices_.clear();
 
-    for(int i=0; i<NUM_CAMERAS; i++)
+    // check whether simulated or read data is being used
+    node.param<bool>("simulation", param_simulation_, false);
+
+    // simulated data: fill intrinsic calibration structures with datasheet values
+    if(param_simulation_)
     {
-        // open calibration yaml file
-        std::ifstream fin(param_intrinsicsPaths_[i]);  
+        // get path of yaml calibration file
+        std::string intrinsicsPathIdeal;
+        node.param<std::string>("calib_file_cam_ideal", intrinsicsPathIdeal, "");
         
+        // open calibration yaml file
+        std::ifstream fin(intrinsicsPathIdeal);  
+           
         // parse yaml file to get cameraInfo
         std::string camName;
         sensor_msgs::CameraInfo camInfo;
@@ -191,24 +185,65 @@ void Ladybug2::getIntrinsics()
             ROS_ERROR("Invalid calibration file! Exiting...");
             ros::shutdown();
         }
-        cameraInfos_.push_back(camInfo);
-        
+
         // get pinhole camera model out of cameraInfo
         image_geometry::PinholeCameraModel camModel;
-        camModel.fromCameraInfo(camInfo);        
-        intrinsics_.push_back(camModel);  
-        
+        camModel.fromCameraInfo(camInfo); 
+
         // get camera matrix
         Eigen::Matrix3f K;
         K << camModel.fx(), 0.0, camModel.cx(), 0.0, camModel.fy(), camModel.cy(), 0.0, 0.0, 1.0;
-        cameraMatrices_.push_back(K); 
+
+        for(int i=0; i<NUM_CAMERAS; i++)
+        {
+            cameraInfos_.push_back(camInfo);
+            intrinsics_.push_back(camModel); 
+            cameraMatrices_.push_back(K); 
+        }
+    }
+    // real data: fill intrinsic calibration structure with ladybug's calibration data
+    else
+    {
+        for(int i=0; i<NUM_CAMERAS; i++)
+        {
+
+            // get path of yaml calibration file
+            std::string intrinsicsPath;
+            char param_calibPath[50];
+            sprintf(param_calibPath, "calib_file_cam_%d", i);
+            node.param<std::string>(std::string(param_calibPath), intrinsicsPath, "");
+
+            // open calibration yaml file
+            std::ifstream fin(intrinsicsPath);  
+            
+            // parse yaml file to get cameraInfo
+            std::string camName;
+            sensor_msgs::CameraInfo camInfo;
+            bool ret = camera_calibration_parsers::readCalibrationYml(fin, camName, camInfo);
+            if(ret == false)
+            {
+                ROS_ERROR("Invalid calibration file! Exiting...");
+                ros::shutdown();
+            }
+            cameraInfos_.push_back(camInfo);
+            
+            // get pinhole camera model out of cameraInfo
+            image_geometry::PinholeCameraModel camModel;
+            camModel.fromCameraInfo(camInfo);        
+            intrinsics_.push_back(camModel);  
+            
+            // get camera matrix
+            Eigen::Matrix3f K;
+            K << camModel.fx(), 0.0, camModel.cx(), 0.0, camModel.fy(), camModel.cy(), 0.0, 0.0, 1.0;
+            cameraMatrices_.push_back(K); 
+        }
     }
 }
 
 /** Get extrinsic parameters.
- * @param void
+ * @param ros::NodeHandle ROS node for reading parameters
  * @return void */
-void Ladybug2::getExtrinsics()
+void Ladybug2::getExtrinsics(ros::NodeHandle node)
 {
     extrinsics_.clear();
 	
@@ -217,10 +252,16 @@ void Ladybug2::getExtrinsics()
 
     for(int i=0; i<NUM_CAMERAS; i++)
     {
+        // get vector with extrinsics data
+        std::vector<double> extrinsicsData;
+        char extParamName[50];
+        sprintf(extParamName, "cam%d_ext", i);
+        node.getParam(std::string(extParamName), extrinsicsData);
+
         // get rotation matrix
-        double rx = param_extrinsicsData_[i][0];
-        double ry = param_extrinsicsData_[i][1];
-        double rz = param_extrinsicsData_[i][2];
+        double rx = extrinsicsData[0];
+        double ry = extrinsicsData[1];
+        double rz = extrinsicsData[2];
         Eigen::Matrix3f Rx, Ry, Rz;
         Rx << 1, 0, 0, 0, cos(rx), -sin(rx), 0, sin(rx), cos(rx);
         Ry << cos(ry), 0, sin(ry), 0, 1, 0, -sin(ry), 0, cos(ry);
@@ -229,7 +270,7 @@ void Ladybug2::getExtrinsics()
 
         // get translation vector
         Eigen::Vector3f t;
-        t << param_extrinsicsData_[i][3], param_extrinsicsData_[i][4], param_extrinsicsData_[i][5];
+        t << extrinsicsData[3], extrinsicsData[4], extrinsicsData[5];
         
         // get transform
         Eigen::Matrix4f ext;
@@ -239,12 +280,4 @@ void Ladybug2::getExtrinsics()
 
         extrinsics_.push_back(ext);
     }
-}
-
-/** Convert vector with CameraInfo messages.
- * @param void
- * @return std::vector<sensor_msgs::CameraInfo> vector with CameraInfo messages */
-std::vector<sensor_msgs::CameraInfo> Ladybug2::getCameraInfoMsg()
-{
-    return cameraInfos_;
 }

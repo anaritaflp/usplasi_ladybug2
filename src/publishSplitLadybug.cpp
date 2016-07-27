@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     
     lb2 = Ladybug2(privateNode);
     
-    camInfos = lb2.getCameraInfoMsg();
+    camInfos = lb2.cameraInfos_;
     
     // for each camera...
     for(int i=0; i<NUM_CAMERAS; i++)

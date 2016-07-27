@@ -7,6 +7,7 @@
         <param name="camera_topic" value="camera/image_raw"/>       
         <param name="color" value="true"/>       
         <param name="yaml_path" value="$(find ladybug2)/param/"/> 
+        <param name="simulation" value="false" />
         <param name="calib_file_cam_0" value="$(find ladybug2)/param/cam0.yaml" />
         <param name="calib_file_cam_1" value="$(find ladybug2)/param/cam1.yaml" />
         <param name="calib_file_cam_2" value="$(find ladybug2)/param/cam2.yaml" />

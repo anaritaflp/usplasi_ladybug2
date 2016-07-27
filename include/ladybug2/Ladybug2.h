@@ -67,32 +67,27 @@ class Ladybug2
          * @return std::vector<cv::Mat> vector with rectified images */
         std::vector<cv::Mat> rectifyManually(std::vector<cv::Mat> images);
 
-        /** Convert vector with CameraInfo messages.
-         * @param void
-         * @return std::vector<sensor_msgs::CameraInfo> vector with CameraInfo messages */
-        std::vector<sensor_msgs::CameraInfo> getCameraInfoMsg();
-
         /** Get intrinsic parameters from manually obtained .yaml files.
-         * @param void
+         * @param ros::NodeHandle ROS node for reading parameters
          * @return void */
-        void getIntrinsics();
+        void getIntrinsics(ros::NodeHandle node);
 
         /** Get extrinsic parameters.
-         * @param void
+         * @param ros::NodeHandle ROS node for reading parameters
          * @return void */
-        void getExtrinsics();
+        void getExtrinsics(ros::NodeHandle node);
 
-        std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Intrinsic parameters: image_geometry::PinholeCameraModel */
-        std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Intrinsic parameters: sensor_msgs::CameraInfo */
-        std::vector<Eigen::Matrix3f> cameraMatrices_;	           		/*!< Intrinsic parameters: camera matrices (K) */
-        std::vector<Eigen::Matrix4f> extrinsics_;		                /*!< Extrinsic parameters: tranformation relatively to global (Ladybug) coordinates */
+        std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Real intrinsic parameters: image_geometry::PinholeCameraModel */
+        std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Real intrinsic parameters: sensor_msgs::CameraInfo */
+        std::vector<Eigen::Matrix3f> cameraMatrices_;	           		/*!< Real intrinsic parameters: camera matrices (K) */
+
+        std::vector<Eigen::Matrix4f> extrinsics_;		                /*!< Real extrinsic parameters: tranformation relatively to global (Ladybug) coordinates */
 
     private:
 
         int cameraPositions_[6] = {5, 4, 3, 2, 1, 0};                   /*!< Conventional camera order =/= order of the stacked images in the full Ladybug image */
 
-        std::vector<std::string> param_intrinsicsPaths_;                /*!< Paths to the files with intrinsic parameters */    
-        std::vector<std::vector<double>> param_extrinsicsData_;         /*!< Vector with extrinsics data of each camera */  
+        bool param_simulation_;                                         /*!< Parameter telling if Ladybug is being used for simulated (true) or real (false) data */  
 };
 
 #endif
