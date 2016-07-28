@@ -62,10 +62,10 @@ class Ladybug2
          * @return std::vector<cv::Mat> vector with undistorted (rectified) images */
         std::vector<cv::Mat> undistort(std::vector<cv::Mat> images);
 
-        /** Rectify images with manually obtained calibration.
+        /** Rectify images with calibration data.
          * @param std::vector<cv::Mat> vector with distorted images
          * @return std::vector<cv::Mat> vector with rectified images */
-        std::vector<cv::Mat> rectifyManually(std::vector<cv::Mat> images);
+        std::vector<cv::Mat> rectify(std::vector<cv::Mat> images);
 
         /** Get intrinsic parameters from manually obtained .yaml files.
          * @param ros::NodeHandle ROS node for reading parameters
@@ -76,6 +76,8 @@ class Ladybug2
          * @param ros::NodeHandle ROS node for reading parameters
          * @return void */
         void getExtrinsics(ros::NodeHandle node);
+
+        cv::Mat matread(const std::string& filename);
 
         std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Real intrinsic parameters: image_geometry::PinholeCameraModel */
         std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Real intrinsic parameters: sensor_msgs::CameraInfo */

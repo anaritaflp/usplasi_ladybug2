@@ -1,0 +1,20 @@
+image_width: 768
+image_height: 1024
+camera_name: ladybug_cam_4
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [559.837443, 0, 376.378822, 0, 558.75419, 510.513641, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.301293, 0.062571, 0.000112, -0.000216, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [172.89, 0, 397.63, 0, 0, 172.89, 527.93, 0, 0, 0, 1, 0]

@@ -8,14 +8,15 @@
         <param name="color" value="true"/>       
         <param name="yaml_path" value="$(find ladybug2)/param/"/> 
         <param name="simulation" value="false" />
-        <param name="calib_file_cam_0" value="$(find ladybug2)/param/cam0.yaml" />
-        <param name="calib_file_cam_1" value="$(find ladybug2)/param/cam1.yaml" />
-        <param name="calib_file_cam_2" value="$(find ladybug2)/param/cam2.yaml" />
-        <param name="calib_file_cam_3" value="$(find ladybug2)/param/cam3.yaml" />
-        <param name="calib_file_cam_4" value="$(find ladybug2)/param/cam4.yaml" />
-        <param name="calib_file_cam_5" value="$(find ladybug2)/param/cam5.yaml" />
+        <param name="calib_file_cam_0" value="$(find ladybug2)/param/provided_calibration/cam0.yaml" />
+        <param name="calib_file_cam_1" value="$(find ladybug2)/param/provided_calibration/cam1.yaml" />
+        <param name="calib_file_cam_2" value="$(find ladybug2)/param/provided_calibration/cam2.yaml" />
+        <param name="calib_file_cam_3" value="$(find ladybug2)/param/provided_calibration/cam3.yaml" />
+        <param name="calib_file_cam_4" value="$(find ladybug2)/param/provided_calibration/cam4.yaml" />
+        <param name="calib_file_cam_5" value="$(find ladybug2)/param/provided_calibration/cam5.yaml" />
         <rosparam file="$(find ladybug2)/param/ladybugExtrinsics.yaml" />
     </node>
+
 
     <!-- ************************************************************* -->
     <!-- ******** VIEW EACH CAMERA IMAGE -->

@@ -68,7 +68,7 @@ void ladybugCallback(const sensor_msgs::Image::ConstPtr &msg)
     // split Ladybug image
     std::vector<cv::Mat> splitImages = lb2.splitLadybug(full_raw_img, colorCode);	
 
-    std::vector<cv::Mat> imagesRect = lb2.rectifyManually(splitImages);
+    std::vector<cv::Mat> imagesRect = lb2.rectify(splitImages);
 
     // for each camera...
     for(int i=0; i<NUM_CAMERAS; i++)

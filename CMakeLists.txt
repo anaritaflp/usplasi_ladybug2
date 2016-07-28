@@ -61,3 +61,10 @@ target_link_libraries(split_ladybug_node
     Ladybug2
 )
 
+add_executable(saveRectificationMaps
+    src/saveRectificationMaps.cpp
+)
+
+target_link_libraries(saveRectificationMaps
+    ${OpenCV_LIBS}
+)

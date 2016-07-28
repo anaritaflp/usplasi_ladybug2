@@ -101,53 +101,46 @@ std::vector<cv::Mat> Ladybug2::undistort(std::vector<cv::Mat> images)
     std::vector<cv::Mat> imagesRect;
     imagesRect.resize(NUM_CAMERAS);
 
-    cv::Mat rectColsCam0(768, 1024, CV_32FC1, vec_rectColsCam0);
-    cv::Mat rectColsCam1(768, 1024, CV_32FC1, vec_rectColsCam1);
-    cv::Mat rectColsCam2(768, 1024, CV_32FC1, vec_rectColsCam2);
-    cv::Mat rectColsCam3(768, 1024, CV_32FC1, vec_rectColsCam3);
-    cv::Mat rectColsCam4(768, 1024, CV_32FC1, vec_rectColsCam4);
-    cv::Mat rectColsCam5(768, 1024, CV_32FC1, vec_rectColsCam5);
+    cv::Mat rectColsCam0 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam0.bin");
+    cv::Mat rectColsCam1 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam1.bin");
+    cv::Mat rectColsCam2 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam2.bin");
+    cv::Mat rectColsCam3 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam3.bin");
+    cv::Mat rectColsCam4 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam4.bin");
+    cv::Mat rectColsCam5 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam5.bin");
 
-    cv::Mat rectRowsCam0(768, 1024, CV_32FC1, vec_rectRowsCam0);
-    cv::Mat rectRowsCam1(768, 1024, CV_32FC1, vec_rectRowsCam1);
-    cv::Mat rectRowsCam2(768, 1024, CV_32FC1, vec_rectRowsCam2);
-    cv::Mat rectRowsCam3(768, 1024, CV_32FC1, vec_rectRowsCam3);
-    cv::Mat rectRowsCam4(768, 1024, CV_32FC1, vec_rectRowsCam4);
-    cv::Mat rectRowsCam5(768, 1024, CV_32FC1, vec_rectRowsCam5);
-    
-    rectRowsCam0 = rectRowsCam0.t();
-    rectRowsCam1 = rectRowsCam1.t();
-    rectRowsCam2 = rectRowsCam2.t();
-    rectRowsCam3 = rectRowsCam3.t();
-    rectRowsCam4 = rectRowsCam4.t();
-    rectRowsCam5 = rectRowsCam5.t();
-    
-    rectColsCam0 = rectColsCam0.t();
-    rectColsCam1 = rectColsCam1.t();
-    rectColsCam2 = rectColsCam2.t();
-    rectColsCam3 = rectColsCam3.t();
-    rectColsCam4 = rectColsCam4.t();
-    rectColsCam5 = rectColsCam5.t();
+    cv::Mat rectRowsCam0 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam0.bin");
+    cv::Mat rectRowsCam1 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam1.bin");
+    cv::Mat rectRowsCam2 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam2.bin");
+    cv::Mat rectRowsCam3 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam3.bin");
+    cv::Mat rectRowsCam4 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam4.bin");
+    cv::Mat rectRowsCam5 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam5.bin");
 
-    cv::remap(images[0], imagesRect[0], rectRowsCam0, rectColsCam0, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[0], imagesRect[0], rectColsCam0, rectRowsCam0, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[1], imagesRect[1], rectColsCam1, rectRowsCam1, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[2], imagesRect[2], rectColsCam2, rectRowsCam2, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[3], imagesRect[3], rectColsCam3, rectRowsCam3, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[4], imagesRect[4], rectColsCam4, rectRowsCam4, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[5], imagesRect[5], rectColsCam5, rectRowsCam5, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+
+    /*cv::remap(images[0], imagesRect[0], rectRowsCam0, rectColsCam0, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
     cv::remap(images[1], imagesRect[1], rectRowsCam1, rectColsCam1, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
     cv::remap(images[2], imagesRect[2], rectRowsCam2, rectColsCam2, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
     cv::remap(images[3], imagesRect[3], rectRowsCam3, rectColsCam3, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
     cv::remap(images[4], imagesRect[4], rectRowsCam4, rectColsCam4, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[5], imagesRect[5], rectRowsCam5, rectColsCam5, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::remap(images[5], imagesRect[5], rectRowsCam5, rectColsCam5, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));*/
 
     return imagesRect;
 }
 
-/** Rectify images with manually obtained calibration.
+/** Rectify images with calibration data.
  * @param std::vector<cv::Mat> vector with distorted images
  * @return std::vector<cv::Mat> vector with rectified images */
-std::vector<cv::Mat> Ladybug2::rectifyManually(std::vector<cv::Mat> images)
+std::vector<cv::Mat> Ladybug2::rectify(std::vector<cv::Mat> images)
 {
     std::vector<cv::Mat> imagesRect;
     for(int i=0; i<NUM_CAMERAS; i++)
     {
-        cv::Mat imRect;        
+        cv::Mat imRect;
         intrinsics_[i].rectifyImage(images[i], imRect);
         imagesRect.push_back(imRect);
     }
@@ -280,4 +273,23 @@ void Ladybug2::getExtrinsics(ros::NodeHandle node)
 
         extrinsics_.push_back(ext);
     }
+}
+
+
+cv::Mat Ladybug2::matread(const std::string& filename)
+{
+    std::ifstream fs(filename.c_str(), std::fstream::binary);
+
+    // Header
+    int rows, cols, type, channels;
+    fs.read((char*)&rows, sizeof(int));         // rows
+    fs.read((char*)&cols, sizeof(int));         // cols
+    fs.read((char*)&type, sizeof(int));         // type
+    fs.read((char*)&channels, sizeof(int));     // channels
+
+    // Data
+    cv::Mat mat(rows, cols, type);
+    fs.read((char*)mat.data, CV_ELEM_SIZE(type) * rows * cols);
+
+    return mat;
 }
