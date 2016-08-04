@@ -92,45 +92,6 @@ void Ladybug2::getLeftRightCameras(int cam, int &camLeft, int &camRight)
         camRight = 0;
     }
 }
- 
-/** Undistort images according to rectification maps.
- * @param std::vector<cv::Mat> vector with distorted images
- * @return std::vector<cv::Mat> vector with undistorted (rectified) images */
-std::vector<cv::Mat> Ladybug2::undistort(std::vector<cv::Mat> images)
-{
-    std::vector<cv::Mat> imagesRect;
-    imagesRect.resize(NUM_CAMERAS);
-
-    cv::Mat rectColsCam0 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam0.bin");
-    cv::Mat rectColsCam1 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam1.bin");
-    cv::Mat rectColsCam2 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam2.bin");
-    cv::Mat rectColsCam3 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam3.bin");
-    cv::Mat rectColsCam4 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam4.bin");
-    cv::Mat rectColsCam5 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectColsCam5.bin");
-
-    cv::Mat rectRowsCam0 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam0.bin");
-    cv::Mat rectRowsCam1 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam1.bin");
-    cv::Mat rectRowsCam2 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam2.bin");
-    cv::Mat rectRowsCam3 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam3.bin");
-    cv::Mat rectRowsCam4 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam4.bin");
-    cv::Mat rectRowsCam5 = matread("/home/anaritapereira/ROS/catkin_ws/src/ladybug2/binary_files/bin_rectRowsCam5.bin");
-
-    cv::remap(images[0], imagesRect[0], rectColsCam0, rectRowsCam0, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[1], imagesRect[1], rectColsCam1, rectRowsCam1, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[2], imagesRect[2], rectColsCam2, rectRowsCam2, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[3], imagesRect[3], rectColsCam3, rectRowsCam3, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[4], imagesRect[4], rectColsCam4, rectRowsCam4, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[5], imagesRect[5], rectColsCam5, rectRowsCam5, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-
-    /*cv::remap(images[0], imagesRect[0], rectRowsCam0, rectColsCam0, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[1], imagesRect[1], rectRowsCam1, rectColsCam1, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[2], imagesRect[2], rectRowsCam2, rectColsCam2, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[3], imagesRect[3], rectRowsCam3, rectColsCam3, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[4], imagesRect[4], rectRowsCam4, rectColsCam4, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    cv::remap(images[5], imagesRect[5], rectRowsCam5, rectColsCam5, CV_INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));*/
-
-    return imagesRect;
-}
 
 /** Rectify images with calibration data.
  * @param std::vector<cv::Mat> vector with distorted images
@@ -275,21 +236,25 @@ void Ladybug2::getExtrinsics(ros::NodeHandle node)
     }
 }
 
-
-cv::Mat Ladybug2::matread(const std::string& filename)
+/** Convert transform in local (camera) coordinates to global (ladybug) coordinates.
+ * @param Eigen::Matrix4f transform in local coordinates
+ * @param int index of the previous camera
+ * @param int index of the current camera
+ * @return Eigen::Matrix4f transform in global coordinates */
+Eigen::Matrix4f Ladybug2::cam2LadybugRef(Eigen::Matrix4f TLocal, int camNoPrev, int camNoCurr)
 {
-    std::ifstream fs(filename.c_str(), std::fstream::binary);
+    Eigen::Matrix4f TGlobal = extrinsics_[camNoPrev] * TLocal.inverse() * extrinsics_[camNoCurr].inverse();
+    return TGlobal;
+}
 
-    // Header
-    int rows, cols, type, channels;
-    fs.read((char*)&rows, sizeof(int));         // rows
-    fs.read((char*)&cols, sizeof(int));         // cols
-    fs.read((char*)&type, sizeof(int));         // type
-    fs.read((char*)&channels, sizeof(int));     // channels
-
-    // Data
-    cv::Mat mat(rows, cols, type);
-    fs.read((char*)mat.data, CV_ELEM_SIZE(type) * rows * cols);
-
-    return mat;
+/** Convert transform in global (ladybug) coordinates to local (camera) coordinates.
+ * @param Eigen::Matrix4f transform in global coordinates
+ * @param int index of the previous camera
+ * @param int index of the current camera
+ * @return Eigen::Matrix4f transform in local coordinates */
+Eigen::Matrix4f Ladybug2::Ladybug2CamRef(Eigen::Matrix4f TGlobal, int camNoPrev, int camNoCurr)
+{
+    Eigen::Matrix4f TLocalInv = extrinsics_[camNoPrev].inverse() * TGlobal * extrinsics_[camNoCurr];
+    Eigen::Matrix4f TLocal = TLocalInv.inverse();
+    return TLocal;
 }

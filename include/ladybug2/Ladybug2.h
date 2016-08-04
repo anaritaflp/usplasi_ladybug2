@@ -21,10 +21,6 @@
 #include <opencv2/opencv.hpp>
 #include <highgui.h>
 
-// Ladybug includes
-#include <ladybug2/rectificationMaps.h>
-
-
 #define NUM_CAMERAS 6           /*!< Total number of cameras */
 #define NUM_OMNI_CAMERAS 5      /*!< Number of cameras in the omnidirectional ring */
 #define IMAGE_WIDTH 768         /*!< Image width of each individual image */
@@ -57,11 +53,6 @@ class Ladybug2
          * @return void */
         void getLeftRightCameras(int cam, int &camLeft, int &camRight);
 
-        /** Undistort images according to rectification maps.
-         * @param std::vector<cv::Mat> vector with distorted images
-         * @return std::vector<cv::Mat> vector with undistorted (rectified) images */
-        std::vector<cv::Mat> undistort(std::vector<cv::Mat> images);
-
         /** Rectify images with calibration data.
          * @param std::vector<cv::Mat> vector with distorted images
          * @return std::vector<cv::Mat> vector with rectified images */
@@ -77,7 +68,19 @@ class Ladybug2
          * @return void */
         void getExtrinsics(ros::NodeHandle node);
 
-        cv::Mat matread(const std::string& filename);
+        /** Convert transform in local (camera) coordinates to global (ladybug) coordinates.
+		 * @param Eigen::Matrix4f transform in local coordinates
+		 * @param int index of the previous camera
+		 * @param int index of the current camera
+		 * @return Eigen::Matrix4f transform in global coordinates */
+		Eigen::Matrix4f cam2LadybugRef(Eigen::Matrix4f TLocal, int camNoPrev, int camNoCurr);
+
+		/** Convert transform in global (ladybug) coordinates to local (camera) coordinates.
+		 * @param Eigen::Matrix4f transform in global coordinates
+		 * @param int index of the previous camera
+		 * @param int index of the current camera
+		 * @return Eigen::Matrix4f transform in local coordinates */
+		Eigen::Matrix4f Ladybug2CamRef(Eigen::Matrix4f TGlobal, int camNoPrev, int camNoCurr);
 
         std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Real intrinsic parameters: image_geometry::PinholeCameraModel */
         std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Real intrinsic parameters: sensor_msgs::CameraInfo */
