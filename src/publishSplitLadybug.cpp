@@ -55,6 +55,13 @@ void ladybugCallback(const sensor_msgs::Image::ConstPtr &msg)
     // convert image message to cv::Mat
     cv::Mat_<uint8_t> full_raw_img = cv::Mat_<uint8_t>(NUM_CAMERAS*IMAGE_WIDTH, IMAGE_HEIGHT, const_cast<uint8_t*>(&msg->data[0]), msg->step);
 
+	int seq = msg->header.seq;
+	int s = msg->header.stamp.sec;
+	int ns = msg->header.stamp.nsec;
+	char filename[200];
+	sprintf(filename, "/home/anaritapereira/ROS/catkin_ws/src/test_remote_timestamp/images_desktop/lb_seq%d_s%d_ns%d.png", seq, s, ns);
+	cv::imwrite(filename, full_raw_img);
+
     std::string colorCode;
     if(paramColor)
     {
@@ -69,7 +76,7 @@ void ladybugCallback(const sensor_msgs::Image::ConstPtr &msg)
     std::vector<cv::Mat> splitImages = lb2.splitLadybug(full_raw_img, colorCode);	
 
     std::vector<cv::Mat> imagesRect = lb2.rectify(splitImages);
-
+	
     // for each camera...
     for(int i=0; i<NUM_CAMERAS; i++)
     {

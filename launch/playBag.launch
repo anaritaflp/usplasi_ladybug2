@@ -21,6 +21,7 @@
     <!-- ************************************************************* -->
     <!-- ******** VIEW EACH CAMERA IMAGE -->
     
+
     <node pkg="image_view" type="image_view" name="image_view_0">
 		<remap from="image" to="/ladybug/0/image_raw" />
     </node>
@@ -49,6 +50,6 @@
     <!-- ************************************************************* -->
     <!-- ******** OPEN BAGFILE -->
     
-    <node pkg="rosbag" type="play" name="bagfile" args="$(find ladybug2)/bagfiles/jun19_cidade.bag" />
+    <node pkg="rosbag" type="play" name="bagfile" args="/home/anaritapereira/ROS/catkin_ws/bags_ladybug_bumblebee/BAGS_SET27/campus1_2.bag" />
 
 </launch>

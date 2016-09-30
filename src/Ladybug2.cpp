@@ -128,7 +128,7 @@ void Ladybug2::getIntrinsics(ros::NodeHandle node)
         node.param<std::string>("calib_file_cam_ideal", intrinsicsPathIdeal, "");
         
         // open calibration yaml file
-        std::ifstream fin(intrinsicsPathIdeal);  
+        std::ifstream fin(intrinsicsPathIdeal.c_str());  
            
         // parse yaml file to get cameraInfo
         std::string camName;
@@ -168,7 +168,7 @@ void Ladybug2::getIntrinsics(ros::NodeHandle node)
             node.param<std::string>(std::string(param_calibPath), intrinsicsPath, "");
 
             // open calibration yaml file
-            std::ifstream fin(intrinsicsPath);  
+            std::ifstream fin(intrinsicsPath.c_str());  
             
             // parse yaml file to get cameraInfo
             std::string camName;
@@ -257,4 +257,14 @@ Eigen::Matrix4f Ladybug2::Ladybug2CamRef(Eigen::Matrix4f TGlobal, int camNoPrev,
     Eigen::Matrix4f TLocalInv = extrinsics_[camNoPrev].inverse() * TGlobal * extrinsics_[camNoCurr];
     Eigen::Matrix4f TLocal = TLocalInv.inverse();
     return TLocal;
+}
+
+/** Retrieves the pose of a camera Y described in coordinates of another camera X.
+ * @param int index of one of the cameras
+ * @param int index of the other camera
+ * @return Eigen::Matrix4f transform between the cameras */
+Eigen::Matrix4f Ladybug2::getCamX2CamYTransform(int camXNo, int camYNo)
+{
+    Eigen::Matrix4f TCamXCamY = extrinsics_[camXNo].inverse() * extrinsics_[camYNo];
+    return TCamXCamY;
 }

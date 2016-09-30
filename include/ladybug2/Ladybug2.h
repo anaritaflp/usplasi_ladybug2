@@ -82,6 +82,12 @@ class Ladybug2
 		 * @return Eigen::Matrix4f transform in local coordinates */
 		Eigen::Matrix4f Ladybug2CamRef(Eigen::Matrix4f TGlobal, int camNoPrev, int camNoCurr);
 
+        /** Retrieves the pose of a camera Y described in coordinates of another camera X.
+		 * @param int index of one of the cameras
+		 * @param int index of the other camera
+		 * @return Eigen::Matrix4f transform between the cameras */
+		Eigen::Matrix4f getCamX2CamYTransform(int camX, int camY);
+
         std::vector<image_geometry::PinholeCameraModel> intrinsics_;	/*!< Real intrinsic parameters: image_geometry::PinholeCameraModel */
         std::vector<sensor_msgs::CameraInfo> cameraInfos_;	            /*!< Real intrinsic parameters: sensor_msgs::CameraInfo */
         std::vector<Eigen::Matrix3f> cameraMatrices_;	           		/*!< Real intrinsic parameters: camera matrices (K) */
