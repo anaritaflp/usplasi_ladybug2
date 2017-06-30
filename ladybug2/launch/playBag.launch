@@ -1,0 +1,54 @@
+<launch>
+
+    <!-- ************************************************************* -->
+    <!-- ******** SPLIT LADYBUG IMAGE INTO 6 IMAGES -->
+    
+    <node pkg="ladybug2" type="split_ladybug_node" name="split" output="screen">
+        <param name="camera_topic" value="camera/image_raw"/>       
+        <param name="color" value="false"/>       
+        <param name="yaml_path" value="$(find ladybug2)/param/"/> 
+        <param name="simulation" value="false" />
+        <param name="calib_file_cam_0" value="$(find ladybug2)/param/provided_calibration/cam0.yaml" />
+        <param name="calib_file_cam_1" value="$(find ladybug2)/param/provided_calibration/cam1.yaml" />
+        <param name="calib_file_cam_2" value="$(find ladybug2)/param/provided_calibration/cam2.yaml" />
+        <param name="calib_file_cam_3" value="$(find ladybug2)/param/provided_calibration/cam3.yaml" />
+        <param name="calib_file_cam_4" value="$(find ladybug2)/param/provided_calibration/cam4.yaml" />
+        <param name="calib_file_cam_5" value="$(find ladybug2)/param/provided_calibration/cam5.yaml" />
+        <rosparam file="$(find ladybug2)/param/ladybugExtrinsics.yaml" />
+    </node>
+
+
+    <!-- ************************************************************* -->
+    <!-- ******** VIEW EACH CAMERA IMAGE -->
+    
+    <node pkg="image_view" type="image_view" name="image_view_0">
+		<remap from="image" to="/ladybug/0/image_raw" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_1">
+		<remap from="image" to="/ladybug/1/image_raw" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_2">
+		<remap from="image" to="/ladybug/2/image_raw" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_3">
+		<remap from="image" to="/ladybug/3/image_raw" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_4">
+		<remap from="image" to="/ladybug/4/image_raw" />
+    </node>
+    
+    <node pkg="image_view" type="image_view" name="image_view_5">
+		<remap from="image" to="/ladybug/5/image_raw" />
+    </node>
+
+   
+    <!-- ************************************************************* -->
+    <!-- ******** OPEN BAGFILE -->
+    
+    <node pkg="rosbag" type="play" name="bagfile" args="/media/anarita/Ana_Rita/CURRENT_WORK/bagfiles/bags_omni_stereo/out06/bloco_didatico.bag" />
+
+</launch>
